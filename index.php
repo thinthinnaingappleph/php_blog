@@ -5,6 +5,11 @@
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location: login.php');
   }
+
+  if($_SESSION['role'] != 0){
+      header('Location: login.php');
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -36,10 +41,25 @@
     </section>
 
     <?php
+      if(!empty($_GET['pageno'])){
+        $pageno=$_GET['pageno'];
+      }else{
+        $pageno=1;
+      }
+      $numOfRecs=6;
+      $offset=($pageno-1) * $numOfRecs;
+
+
       $stmt = $pdo->prepare('SELECT * FROM posts ORDER BY  id DESC');
       $stmt->execute();
+      $rawResult= $stmt->fetchAll();
+
+      $total_pages=ceil(count($rawResult) / $numOfRecs);
+
+      $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY  id DESC LIMIT $offset,$numOfRecs");
+      $stmt->execute();
       $result= $stmt->fetchAll();
-     ?>
+   ?>
     <!-- Main content -->
     <section class="content">
       <div class="row row-wrap">
@@ -71,8 +91,30 @@
        ?>
       </div>
       <!-- /.row -->
+      <div class="row" style="position: absolute;bottom: 3rem; right: 1rem;">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="?pageno=1">First</a></li>
+            <li class="page-item <?php if($pageno <= 1){echo 'disabled';} ?>">
+              <a class="page-link" href="<?php if($pageno <= 1){echo '#';} else{echo '?pageno='.($pageno-1);} ?>">
+                Previous
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#"><?php echo $pageno ?></a></li>
+            <li class="page-item <?php if($pageno >= $total_pages){echo 'disabled';} ?>">
+              <a class="page-link" href="<?php if($pageno >= $total_pages){echo '#';} else {echo '?pageno='.($pageno+1);} ?>">
+                Next
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="<?php echo '?pageno='.$total_pages ?>">Last</a></li>
+          </ul>
+        </nav>
+      </div>
+      <br/> <br/>
+
     </section>
     <!-- /.content -->
+
 
     <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
       <i class="fas fa-chevron-up"></i>

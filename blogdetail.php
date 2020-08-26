@@ -6,6 +6,10 @@
     header('Location: login.php');
   }
 
+  if($_SESSION['role'] != 0){
+      header('Location: login.php');
+  }
+
   $stmt=$pdo->prepare("SELECT * FROM posts WHERE id=".$_GET['id']);
   $stmt->execute();
   $result=$stmt->fetchAll();
