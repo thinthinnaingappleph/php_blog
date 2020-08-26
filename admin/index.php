@@ -23,7 +23,7 @@ if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
               }else{
                 $pageno=1;
               }
-              $numOfRecs=1;
+              $numOfRecs=5;
               $offset=($pageno-1) * $numOfRecs;
 
               if(empty($_POST['search'])){
