@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../config/common.php';
 if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
   header('Location: login.php');
 }
@@ -63,6 +64,7 @@ if($_POST){
                   <h3 class="card-title">Edit Blog Form</h3>
                 </div>
                 <div class="card-body">
+                    <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                     <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?>">
                     <div class="form-group">
                       <label for="">Title</label><p class="text-danger"><?php echo empty($titleError)? '': $titleError ?></p>

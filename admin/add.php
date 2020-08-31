@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../config/common.php';
 if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
   header('Location: login.php');
 }
@@ -10,6 +11,7 @@ if($_SESSION['role']!= 1){
 }
 
 if($_POST){
+
   if (empty($_POST['title'])|| empty($_POST['content']) || empty($_FILES['image']['name'])) {
     if(empty($_POST['title'])){
       $titleError = "Title cannot be null";
@@ -53,6 +55,7 @@ if($_POST){
         <div class="col-md-12">
           <div class="card">
               <form class="" action="add.php" method="post" enctype="multipart/form-data">
+                <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                 <div class="card-header">
                   <h3 class="card-title">Blog Form</h3>
                 </div>

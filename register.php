@@ -1,6 +1,8 @@
 <?php
 session_start();
 require 'config/config.php';
+require 'config/common.php';
+
   if($_POST){
     if (empty($_POST['name'])|| empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 4) {
       if(empty($_POST['name'])){
@@ -17,7 +19,7 @@ require 'config/config.php';
       }
     }else {
       $name = $_POST['name'];
-      $email = $_POST['email'];    
+      $email = $_POST['email'];
       $password = password_hash($_POST['password'],PASSWORD_DEFAULT);;
       $stmt=$pdo->prepare('SELECT * FROM users WHERE email=:email');
       $stmt->bindValue(':email',$email);
@@ -69,6 +71,7 @@ require 'config/config.php';
        <p class="login-box-msg">Register New Account</p>
 
        <form action="register.php" method="post">
+         <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
          <p class="text-danger"><?php echo empty($nameError)? '': '*'.$nameError ?></p>
          <div class="input-group mb-3">
            <input type="text" name="name" class="form-control" placeholder="Name">

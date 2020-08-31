@@ -1,6 +1,7 @@
 <?php
   session_start();
   require '../config/config.php';
+  require '../config/common.php';
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location: login.php');
   }
@@ -22,7 +23,7 @@
     }else{
       $id= $_POST['id'];
       $name= $_POST['name'];
-      $email= $_POST['email'];      
+      $email= $_POST['email'];
       $password= password_hash($_POST['password'],PASSWORD_DEFAULT);
       if(empty($_POST['role'])){
         $role = 0;
@@ -64,6 +65,7 @@
                   <h3 class="card-title">Edit User Form</h3>
                 </div>
                 <div class="card-body">
+                    <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
                     <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?>">
                     <div class="form-group">
                       <label for="">Name</label><p class="text-danger"><?php echo empty($nameError)? '': '*'.$nameError ?></p>
