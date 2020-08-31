@@ -11,28 +11,44 @@
   }
 
   if($_POST){
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    if(empty($_POST['role'])){
-      $role = 0;
-    }else{
-      $role = 1;
-  }
-
-  $stmt=$pdo->prepare('SELECT * FROM users WHERE email=:email');
-  $stmt->bindValue(':email',$email);
-  $stmt->execute();
-  $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    if($user){
-      echo "<script>alert('Email Duplicate');</script>";
-    }else{
-      $stmt=$pdo->prepare('INSERT INTO users(name,email,role) VALUES (:name,:email,:role)');
-      $result=$stmt->execute(
-        array(':name'=>$name,':email'=>$email,':role'=>$role)
-      );
-      if($result){
-        echo "<script>alert('Successfully added');window.location.href='user-list.php';</script>";
+    if (empty($_POST['name'])|| empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 4) {
+      if(empty($_POST['name'])){
+        $nameError = "Name cannot be null";
       }
+      if(empty($_POST['email'])){
+        $emailError="Email cannot be null";
+      }
+      if(empty($_POST['password'])){
+        $passwordError="Password cannot be null";
+      }
+      if(strlen($_POST['password']) < 4){
+        $passwordError="Password must be 4 character at least";
+      }
+    }else {
+      $name = $_POST['name'];
+      $email = $_POST['email'];
+      $password= $_POST['password'];
+      if(empty($_POST['role'])){
+        $role = 0;
+      }else{
+        $role = 1;
+      }
+
+      $stmt=$pdo->prepare('SELECT * FROM users WHERE email=:email');
+      $stmt->bindValue(':email',$email);
+      $stmt->execute();
+      $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($user){
+          echo "<script>alert('Email Duplicate');</script>";
+        }else{
+          $stmt=$pdo->prepare('INSERT INTO users(name,email,password,role) VALUES (:name,:email,:password,:role)');
+          $result=$stmt->execute(
+            array(':name'=>$name,':email'=>$email,':password'=>$password,':role'=>$role)
+          );
+          if($result){
+            echo "<script>alert('Successfully added');window.location.href='user-list.php';</script>";
+          }
+        }
     }
   }
  ?>
@@ -50,12 +66,16 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                      <label for="">Name</label>
-                      <input type="text" class="form-control" name="name" value="" required>
+                      <label for="">Name</label><p class="text-danger"><?php echo empty($nameError)? '': '*'.$nameError ?></p>
+                      <input type="text" class="form-control" name="name" value="">
                     </div>
                     <div class="form-group">
-                      <label for="">Email</label>
-                      <input type="email" class="form-control" name="email" value="" required>
+                      <label for="">Email</label><p class="text-danger"><?php echo empty($emailError)? '': '*'.$emailError ?></p>
+                      <input type="email" class="form-control" name="email" value="">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Password</label><p class="text-danger"><?php echo empty($passwordError)? '': '*'.$passwordError ?></p>
+                      <input type="password" class="form-control" name="password" value="" >
                     </div>
                     <div class="form-group">
                       <label for="role">Admin</label><br/>

@@ -10,25 +10,38 @@ if($_SESSION['role']!= 1){
 }
 
 if($_POST){
-  $file = 'images/'.$_FILES['image']['name'];
-  $fileType= pathinfo($file,PATHINFO_EXTENSION);
-  if($fileType != 'png' && $fileType != 'jpg' && $fileType != 'jpeg'){
-    echo "<script>alert('Image must be png,jpg,jpeg');</script>";
+  if (empty($_POST['title'])|| empty($_POST['content']) || empty($_FILES['image']['name'])) {
+    if(empty($_POST['title'])){
+      $titleError = "Title cannot be null";
+    }
+    if(empty($_POST['content'])){
+      $contentError="Content cannot be null";
+    }
+    if(empty($_FILES['image']['name'])){
+      $imageError="Image cannot be null";
+    }
   }else{
-    $title = $_POST['title'];
-    $content = $_POST['content'];
-    $auther_id = $_SESSION['user_id'];
-    $image = $_FILES['image']['name'];
-    move_uploaded_file($_FILES['image']['tmp_name'],$file);
-    $stmt=$pdo->prepare('INSERT INTO posts(title,content,auther_id,image) VALUES (:title,:content,:auther_id,:image)');
-    $result=$stmt->execute(
-      array(':title'=>$title,':content'=>$content,':auther_id'=>$auther_id,':image'=>$image)
-    );
-    if($result){
-      echo "<script>alert('Successfully added');window.location.href='index.php';</script>";
-      // header('Location: index.php');
+    $file = 'images/'.$_FILES['image']['name'];
+    $fileType= pathinfo($file,PATHINFO_EXTENSION);
+    if($fileType != 'png' && $fileType != 'jpg' && $fileType != 'jpeg'){
+      echo "<script>alert('Image must be png,jpg,jpeg');</script>";
+    }else{
+      $title = $_POST['title'];
+      $content = $_POST['content'];
+      $auther_id = $_SESSION['user_id'];
+      $image = $_FILES['image']['name'];
+      move_uploaded_file($_FILES['image']['tmp_name'],$file);
+      $stmt=$pdo->prepare('INSERT INTO posts(title,content,auther_id,image) VALUES (:title,:content,:auther_id,:image)');
+      $result=$stmt->execute(
+        array(':title'=>$title,':content'=>$content,':auther_id'=>$auther_id,':image'=>$image)
+      );
+      if($result){
+        echo "<script>alert('Successfully added');window.location.href='index.php';</script>";
+        // header('Location: index.php');
+      }
     }
   }
+
 }
  ?>
 <?php include('header.php'); ?>
@@ -45,16 +58,16 @@ if($_POST){
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                      <label for="">Title</label>
-                      <input type="text" class="form-control" name="title" value="" required>
+                      <label for="">Title</label><p class="text-danger">  <?php echo empty($titleError)? '': '*'.$titleError ?></p>
+                      <input type="text" class="form-control" name="title" value="">
                     </div>
                     <div class="form-group">
-                      <label for="">Content</label><br/>
+                      <label for="">Content</label><p class="text-danger"><?php echo empty($contentError)? '': '*'.$contentError ?></p>
                       <textarea class="form-control" name="content" rows="8" cols="80"></textarea>
                     </div>
                     <div class="form-group">
-                      <label for="">Image</label><br/>
-                      <input type="file" name="image" value="" required>
+                      <label for="">Image</label><p class="text-danger">  <?php echo empty($imageError)? '': $imageError ?></p>
+                      <input type="file" name="image" value="">
                     </div>
                 </div>
                 <div class="card-footer text-right">
