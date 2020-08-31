@@ -69,11 +69,11 @@
                     <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?>">
                     <div class="form-group">
                       <label for="">Name</label><p class="text-danger"><?php echo empty($nameError)? '': '*'.$nameError ?></p>
-                      <input type="text" class="form-control" name="name" value="<?php echo $result[0]['name'] ?>">
+                      <input type="text" class="form-control" name="name" value="<?php echo escape($result[0]['name']) ?>">
                     </div>
                     <div class="form-group">
                       <label for="">Email</label><p class="text-danger"><?php echo empty($emailError)? '': '*'.$emailError ?></p>
-                        <input type="email" class="form-control" name="email" value="<?php echo $result[0]['email'] ?>">
+                        <input type="email" class="form-control" name="email" value="<?php echo escape($result[0]['email']) ?>">
                     </div>
                     <div class="form-group">
                       <label for="">Password</label><p class="text-danger"><?php echo empty($passwordError)? '': '*'.$passwordError ?></p>

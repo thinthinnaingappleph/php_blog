@@ -68,11 +68,11 @@ if($_POST){
                     <input type="hidden" name="id" value="<?php echo $result[0]['id'] ?>">
                     <div class="form-group">
                       <label for="">Title</label><p class="text-danger"><?php echo empty($titleError)? '': $titleError ?></p>
-                      <input type="text" class="form-control" name="title" value="<?php echo $result[0]['title'] ?>">
+                      <input type="text" class="form-control" name="title" value="<?php echo escape($result[0]['title']) ?>">
                     </div>
                     <div class="form-group">
                       <label for="">Content</label><p class="text-danger"><?php echo empty($contentError)? '': $contentError ?></p>
-                      <textarea class="form-control" name="content" rows="8" cols="80"><?php echo $result[0]['content'] ?></textarea>
+                      <textarea class="form-control" name="content" rows="8" cols="80"><?php echo escape($result[0]['content']) ?></textarea>
                     </div>
                     <div class="form-group">
                       <label for="">Image</label><p class="text-danger"><?php echo empty($imageError)? '': $imageError ?></p>
