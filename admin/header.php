@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -38,6 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- SEARCH FORM -->
     <form class="form-inline ml-3" method="post" action="<?php echo $page === 'index.php' ? 'index.php' : 'user-list.php'?>">
+      <input name="_token" type="hidden" value="<?php echo $_SESSION['_token']; ?>">
       <div class="input-group input-group-sm">
         <input name="search" class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
